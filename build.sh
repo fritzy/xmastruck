@@ -1,3 +1,3 @@
-!#/bin/bash
+#!/bin/bash
 
-browserify game.js > out.js
+browserify lib/game.js > out.js
