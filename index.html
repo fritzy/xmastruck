@@ -2,81 +2,16 @@
 <head>
     <script src="cp.js"></script>
     <script src="cp.extra.js"></script>
+    <script src="out.js"></script>
 <head>
 <body>
 <canvas id='c' width=800 height=600></canvas>
 </body>
 
 <script>
-var raf = window.requestAnimationFrame
-
-	|| window.webkitRequestAnimationFrame
-	|| window.mozRequestAnimationFrame
-	|| window.oRequestAnimationFrame
-	|| window.msRequestAnimationFrame
-	|| function(callback) {
-		return window.setTimeout(callback, 1000 / 60);
-	};
-  var space = new cp.Space();
-  space.iterations = 10;
-  space.gravity = cp.v(0, 100);
   var canvas = document.getElementById('c');
-  var ctx = canvas.getContext('2d');
-
-  var shape = space.addShape(new cp.SegmentShape(space.staticBody, cp.v(0, 500), cp.v(150, 500), 0));
-  shape.setElasticity(1);
-  shape.setFriction(1);
-  var shape = space.addShape(new cp.SegmentShape(space.staticBody, cp.v(150, 500), cp.v(500, 400), 0));
-  shape.setElasticity(1);
-  shape.setFriction(1);
-
-  var wheel1 = space.addBody(new cp.Body(1, cp.momentForCircle(1, 0, 15, cp.v(0,0))));
-  wheel1.setPos(cp.v(20,50));
-  var shape = space.addShape(new cp.CircleShape(wheel1, 15, cp.v(0,0)));
-  shape.setElasticity(0);
-  shape.setFriction(1);
-  shape.group = 1;
-
-  var wheel2 = space.addBody(new cp.Body(1, cp.momentForCircle(1, 0, 15, cp.v(0,0))));
-  wheel2.setPos(cp.v(80,50));
-  var shape = space.addShape(new cp.CircleShape(wheel2, 15, cp.v(0,0)));
-  shape.setElasticity(0);
-  shape.setFriction(0.7);
-  shape.group = 1;
-
-  var chassis = space.addBody(new cp.Body(5, cp.momentForBox(10, 130, 30)));
-  chassis.setPos(cp.v(500, 0));
-  var shape = space.addShape(new cp.BoxShape(chassis, 130, 30));
-  shape.setElasticity(0);
-  shape.setFriction(.7);
-  shape.group = 1;
-
-    space.addConstraint(new cp.GrooveJoint(chassis, wheel1, cp.v(-40, 10), cp.v(-40, 20), cp.v(0,0)));
-    space.addConstraint(new cp.GrooveJoint(chassis, wheel2, cp.v( 40, 10), cp.v( 40, 20), cp.v(0,0)));
-
-    space.addConstraint(new cp.DampedSpring(chassis, wheel1, cp.v(-40, -10), cp.v(0,0), 100, 10, 10));
-    space.addConstraint(new cp.DampedSpring(chassis, wheel2, cp.v( 40, -10), cp.v(0,0), 100, 10, 10));
-
-
-      wheel1.applyForce(cp.v(40, -15), cp.v(-500, -15));
-  function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      space.step(1/60);
-      //console.log(wheel1);
-      space.eachShape(function(shape) {
-          ctx.fillStyle = shape.style();
-          shape.draw(ctx, 1, function (point) { return v(point.x * self.scale, (480 - point.y) * self.scale); });
-      });
-
-      space.eachConstraint(function(c) {
-          c.draw(ctx, 1, function (point) { return v(point.x * self.scale, (480 - point.y) * self.scale); });
-      });
-
-      raf(draw);
-  }
-
-  draw();
-
+  var game = new XmasTruck(canvas);
+  game.tick();
 
 </script>
 </html>
